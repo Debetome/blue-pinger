@@ -14,12 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BluePingerService implements BlueService {
     public static final String TAG = "BluetoothPingerService";
     private static final int PACKET_SIZE = 600;
+
     private final List<UUID> uuids = new ArrayList<>();
     private final Random random = new Random();
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1); // Executor for delayed tasks
 
     @SuppressLint("MissingPermission")
     @Override
@@ -36,19 +41,18 @@ public class BluePingerService implements BlueService {
             return;
         }
 
-        // Check if UUIDs are already stored, otherwise fetch them
-        if (uuids.isEmpty()) {
-            Log.d(TAG, "Fetching UUIDs...");
-            if (!device.fetchUuidsWithSdp()) {
-                Log.e(TAG, "Failed to fetch UUIDs.");
-                return;
-            }
+        // If UUIDs are available, connect immediately
+        if (!uuids.isEmpty() || device.getUuids() != null || device.getUuids().length != 0) {
+            connectToDevice(device, bluetoothAdapter, mainHandler);
+            return;
+        }
 
-            // Delay to allow UUID discovery to complete
-            new Handler().postDelayed(() -> connectToDevice(device, bluetoothAdapter, mainHandler), 2000);
-        } else {
+        Log.i(TAG, "Fetching UUIDs...");
+        if (device.fetchUuidsWithSdp()) {
             connectToDevice(device, bluetoothAdapter, mainHandler);
         }
+
+        Log.e(TAG, "Failed to fetch UUIDs.");
     }
 
     @SuppressLint("MissingPermission")
@@ -67,17 +71,18 @@ public class BluePingerService implements BlueService {
                     return;
                 }
 
-                // Store retrieved UUIDs
                 for (ParcelUuid parcelUuid : parcelUuids) {
                     uuids.add(parcelUuid.getUuid());
                 }
 
-                // Use the first available UUID
                 socket = device.createInsecureRfcommSocketToServiceRecord(uuids.get(0));
             } else {
-                // Pick a random UUID from stored list
                 UUID randomUUID = uuids.get(random.nextInt(uuids.size()));
                 socket = device.createInsecureRfcommSocketToServiceRecord(randomUUID);
+            }
+
+            if (uuids.get(0) != null) {
+                Log.d(TAG, "UUIDs available");
             }
 
             bluetoothAdapter.cancelDiscovery();
