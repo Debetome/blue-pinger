@@ -29,7 +29,48 @@
             android:layout_height="50dp"
             android:hint="Number of Threads"
             android:inputType="number"
-            android:layout_marginBottom="40dp"/>
+            android:layout_marginBottom="30dp"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:paddingTop="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:layout_marginBottom="30dp">
+
+            <CheckBox
+                android:id="@+id/cb_ping"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="Ping"
+                android:textSize="16sp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/cb_pair"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="Pair"
+                android:textSize="16sp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/cb_scan"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="Scan"
+                android:textSize="16sp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_start_pinging"

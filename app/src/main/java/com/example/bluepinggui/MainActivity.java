@@ -10,14 +10,18 @@ import android.provider.Settings;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.CheckBox;
 import android.widget.Toast;
 import android.Manifest;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.util.Arrays;
 
 import com.example.bluepinggui.target.profile.TargetProfile;
 import com.example.bluepinggui.target.profile.TargetProfileBuilder;
@@ -31,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText etBluetoothAddress1;
     private EditText etThreadCount;
     private TextView tvStatus;
+
+    private CheckBox cbPing;
+    private CheckBox cbPair;
+    private CheckBox cbScan;
 
     private PowerManager.WakeLock wakeLock;
     private TargetProfile targetProfile;
@@ -51,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnStartPinging = findViewById(R.id.btn_start_pinging);
         Button btnStopPinging = findViewById(R.id.btn_stop_pinging);
+
+        cbPing = findViewById(R.id.cb_ping);
+        cbPair = findViewById(R.id.cb_pair);
+        cbScan = findViewById(R.id.cb_scan);
 
         btnStartPinging.setOnClickListener(v -> {
             String address = etBluetoothAddress1.getText().toString().trim();
@@ -75,9 +87,30 @@ public class MainActivity extends AppCompatActivity {
             wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BluetoothPingerService::WakeLock");
             wakeLock.acquire();
 
+            BlueServiceType[] blueServices = new BlueServiceType[3];
+            int serviceIndex = 0;
+
+            if (cbPing.isChecked()) {
+                blueServices[serviceIndex++] = BlueServiceType.PING;
+            }
+            if (cbPair.isChecked()) {
+                blueServices[serviceIndex++] = BlueServiceType.PAIR;
+            }
+            if (cbScan.isChecked()) {
+                blueServices[serviceIndex++] = BlueServiceType.SCAN;
+            }
+
+            if (serviceIndex == 0) {
+                Toast.makeText(this, "At least one service has to be checked/activated (Ping, Pair or Scan).", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "At least one service has to be checked/activated (Ping, Pair or Scan).");
+                setStatus("Error, you need to check at least one of checkboxes");
+                return;
+            }
+
+            blueServices = Arrays.copyOf(blueServices, serviceIndex);
             targetProfile = new TargetProfileBuilder()
                     .bluetoothAddress(address)
-                    .services(new BlueServiceType[]{ BlueServiceType.PING, BlueServiceType.PAIR, BlueServiceType.SCAN })
+                    .services(blueServices)
                     .threadCount(threadCount)
                     .build();
 
