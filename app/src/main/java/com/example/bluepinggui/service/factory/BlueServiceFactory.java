@@ -3,7 +3,7 @@ package com.example.bluepinggui.service.factory;
 import android.util.Log;
 
 import com.example.bluepinggui.service.strategy.BlueService;
-import com.example.bluepinggui.service.strategy.BluePingerBlueService;
+import com.example.bluepinggui.service.strategy.BluePingerService;
 import com.example.bluepinggui.service.strategy.BluePairingBlueService;
 import com.example.bluepinggui.service.strategy.BlueScanBlueService;
 
@@ -13,7 +13,7 @@ public class BlueServiceFactory {
     public static BlueService createService(BlueServiceType type) {
         switch (type) {
             case PING:
-                return new BluePingerBlueService();
+                return new BluePingerService();
             case PAIR:
                 return new BluePairingBlueService();
             case SCAN:

@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 import java.util.HashMap;
 import java.lang.Math;
 
-import com.example.bluepinggui.service.strategy.BluePingerBlueService;
+import com.example.bluepinggui.service.strategy.BluePingerService;
 import com.example.bluepinggui.service.strategy.BlueService;
 import com.example.bluepinggui.service.factory.BlueServiceFactory;
 import com.example.bluepinggui.service.factory.BlueServiceType;
@@ -64,7 +64,7 @@ public class TargetProfile {
 
         Semaphore semaphore = new Semaphore(10);  // Shared between both operations
 
-        synchronized (BluePingerBlueService.class) {
+        synchronized (BluePingerService.class) {
             try {
                 semaphore.acquire();
                 for (BlueContext blueContext : blueContexts.values()) {
