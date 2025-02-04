@@ -10,7 +10,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.util.Log;
 
-public class BlueScanBlueService implements BlueService {
+public class BlueScanService implements BlueService {
     private static final String TAG = "BlueScanService";
     private BroadcastReceiver scanReceiver;
 

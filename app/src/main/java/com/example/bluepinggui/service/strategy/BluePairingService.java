@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
-public class BluePairingBlueService implements BlueService {
+public class BluePairingService implements BlueService {
     private static final String TAG = "BluetoothPairingService";
 
     @SuppressLint("MissingPermission")
