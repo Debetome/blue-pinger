@@ -47,7 +47,7 @@ public class BlueContext {
         String tag = String.format("%s.%s", TAG, contextName);
         while (isRunning) {
             try {
-                long randomDelay = 50 + (long) (Math.random() * (500 - 50));
+                long randomDelay = 50 + (long) (Math.random() * (300 - 50));
                 executeThreadLogic(context, bluetoothAddress, mainHandler);
                 Thread.sleep(randomDelay);
             } catch (InterruptedException e) {

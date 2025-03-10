@@ -29,7 +29,7 @@ public class BlueContextBuilder {
 
     // Default to some relatively convenient values
     private int threadCount = 1;
-    private int minAttempts = 3;
+    private int minAttempts = 5;
     private int maxAttempts = 5;
 
     // Fluent setters (return the builder for method chaining)

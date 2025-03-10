@@ -41,7 +41,7 @@ public class BluePingerService implements BlueService {
         }
 
         // If UUIDs are available, connect immediately
-        if (!uuids.isEmpty() || device.getUuids() != null || device.getUuids().length != 0) {
+        if (!uuids.isEmpty() || (device.getUuids() != null && device.getUuids().length != 0)) {
             connectToDevice(device, bluetoothAdapter, mainHandler);
             return;
         }

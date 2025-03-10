@@ -62,7 +62,7 @@ public class TargetProfile {
 
         createContexts();
 
-        Semaphore semaphore = new Semaphore(10);  // Shared between both operations
+        Semaphore semaphore = new Semaphore(20);  // Shared between both operations
 
         synchronized (BluePingerService.class) {
             try {
